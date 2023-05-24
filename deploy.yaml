@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: items-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: items-api
+    spec:
+      containers:
+      - name: items-api
+        image: edez58/pir-api
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://*:8080
+  selector:
+    matchLabels:
+      app: items-api 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-api 
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: items-api 
